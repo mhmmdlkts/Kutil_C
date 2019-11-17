@@ -1,46 +1,35 @@
 #include <stdio.h>
-#include <stdlib.h> // For exit() function
 #include <string.h>
+#include <stdlib.h> // For exit() function
 
 typedef struct teil {
-    char typ[30], bez[30], einheit[10];
-    double gewicht, preis;
+    char typ[30], bez[30], einheit[10], gewicht[30], preis[30];
     struct teil * next;
     struct teil * needs;
     
 }teil;
 
-int main()
-{
-    FILE *teilFile, *schrittFile;
-    if ((teilFile = fopen("teil.dat", "r")) == NULL)
+teil* readTeils(teil *HEAD, char path[]) {
+    FILE *teilFile;
+    if ((teilFile = fopen(path, "r")) == NULL)
     {
         printf("Error! opening file");
         exit(1);
     }
 
-    if ((schrittFile = fopen("schritt.dat", "r")) == NULL)
+    char teil_typ[30], teil_bez[30], teil_einheit[10], teil_gewicht[30], teil_preis[30]; //teil.dat
+	
+	teil *TAIL = NULL;
+    
+    
+    while( fscanf(teilFile,"%s %s %s %s %s", &teil_typ, &teil_bez, &teil_einheit, &teil_gewicht, &teil_preis) != EOF )
     {
-        printf("Error! opening file");
-        exit(1);
-    }
-
-    char teil_typ[30], teil_bez[30], teil_einheit[10]; //teil.dat
-    double teil_gewicht = 0, teil_preis = 0;
-
-    teil *HEAD = NULL;
-    teil *TAIL = NULL;
-    int size = 0;
-
-    while( fscanf(teilFile,"%s %s %s %lf %lf", &teil_typ, &teil_bez, &teil_einheit, &teil_gewicht, &teil_preis) != EOF )
-    {
-        size++;
         teil *temp = (teil*)malloc(sizeof(teil));
         strcpy(temp->typ, teil_typ);
         strcpy(temp->bez, teil_bez);
         strcpy(temp->einheit, teil_einheit);
-        temp->gewicht = teil_gewicht;
-        temp->preis = teil_preis;
+        strcpy(temp->gewicht, teil_gewicht);
+        strcpy(temp->preis, teil_preis);
         temp->needs = NULL;
         temp->next = NULL;
 
@@ -54,11 +43,21 @@ int main()
 
     }
     fclose(teilFile);
+    return HEAD;
+}
 
+void readSchritts(teil *HEAD, char path[]) {
+	
+    FILE *schrittFile;
+    if ((schrittFile = fopen(path, "r")) == NULL)
+    {
+        printf("Error! opening file");
+        exit(1);
+    }
+
+	teil *TAIL_temp = NULL;
     char ziel_typ[30], ziel_bez[30], quel_typ[30], quel_bez[30]; //schritt.dat
     int nr = 0;
-
-    teil *TAIL_temp = NULL;
 
     while( fscanf(schrittFile,"%s %s %d %s %s %*lf %*s %*lf", &ziel_typ, &ziel_bez, &nr, &quel_typ, &quel_bez) != EOF )
     {
@@ -72,7 +71,6 @@ int main()
             teil *p = HEAD;
             while (p != NULL) {
                 if((strcmp(p->typ, ziel_typ) == 0) && (strcmp(p->bez, ziel_bez)== 0)) {
-                    //printf("if   %s %s \n", p->typ, p->bez);
                     p->needs = temp;
                     TAIL_temp = p->needs;
                     break;
@@ -84,12 +82,13 @@ int main()
             TAIL_temp = temp;
         }
     }
+    
     fclose(schrittFile);
+}
 
-
-    teil *HEAD_sorted = NULL;
+teil* sortingTeils(teil *HEAD, teil *HEAD_sorted) {
+	
     teil *TAIL_sorted = NULL;
-
 
     while (HEAD != NULL) { // Liste boÅŸalana kadar
         teil *p = HEAD;
@@ -141,16 +140,34 @@ int main()
             }
         }
     }
+    
+    return HEAD_sorted;
+}
 
-    FILE * fOutput = fopen("geordnet.dat", "w");
-    teil *p = HEAD_sorted;
+void printTeils(teil *HEAD, char path[]) {
+    FILE * fOutput = fopen(path, "w");
+    teil *p = HEAD;
     while (p != NULL) {
-        fprintf(fOutput,"%s %s %s %lf %lf\n", p->typ, p->bez, p->einheit, p->gewicht, p->preis);
+        fprintf(fOutput,"%s %s %s %s %s\n", p->typ, p->bez, p->einheit, p->gewicht, p->preis);
         p = p->next;
     }
     fclose(fOutput);
+}
 
+int main()
+{
+    char teilPath[] = "teil.dat";
+    char schrittPath[] = "schritt.dat";
+    char geordnetPath[] = "geordnet.dat";
 
+    teil *HEAD = NULL;
+	HEAD = readTeils(HEAD, teilPath);
+    readSchritts(HEAD, schrittPath);
+    
+    teil *HEAD_sorted = NULL;
+    HEAD_sorted = sortingTeils(HEAD, HEAD_sorted);
+
+	printTeils(HEAD_sorted, geordnetPath);
 
     return 0;
 }
