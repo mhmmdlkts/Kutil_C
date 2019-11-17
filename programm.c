@@ -3,38 +3,44 @@
 #include <string.h>
 
 typedef struct teil {
-    char typ[30], bez[30];
+    char typ[30], bez[30], einheit[10];
+    double gewicht, preis;
     struct teil * next;
     struct teil * needs;
+    
 }teil;
 
 int main()
 {
     FILE *teilFile, *schrittFile;
-    if ((teilFile = fopen("C:\\Users\\mhmmd\\CLionProjects\\Kutil\\teil.dat", "r")) == NULL)
+    if ((teilFile = fopen("teil.dat", "r")) == NULL)
     {
         printf("Error! opening file");
         exit(1);
     }
 
-    if ((schrittFile = fopen("C:\\Users\\mhmmd\\CLionProjects\\Kutil\\schritt.dat", "r")) == NULL)
+    if ((schrittFile = fopen("schritt.dat", "r")) == NULL)
     {
         printf("Error! opening file");
         exit(1);
     }
 
-    char teil_typ[30], teil_bez[30]; //teil.dat
+    char teil_typ[30], teil_bez[30], teil_einheit[10]; //teil.dat
+    double teil_gewicht = 0, teil_preis = 0;
 
     teil *HEAD = NULL;
     teil *TAIL = NULL;
     int size = 0;
 
-    while( fscanf(teilFile,"%s %s %*s %*lf %*lf", &teil_typ, &teil_bez) != EOF )
+    while( fscanf(teilFile,"%s %s %s %lf %lf", &teil_typ, &teil_bez, &teil_einheit, &teil_gewicht, &teil_preis) != EOF )
     {
         size++;
         teil *temp = (teil*)malloc(sizeof(teil));
         strcpy(temp->typ, teil_typ);
         strcpy(temp->bez, teil_bez);
+        strcpy(temp->einheit, teil_einheit);
+        temp->gewicht = teil_gewicht;
+        temp->preis = teil_preis;
         temp->needs = NULL;
         temp->next = NULL;
 
@@ -85,15 +91,15 @@ int main()
     teil *TAIL_sorted = NULL;
 
 
-    while (HEAD != NULL) { // Liste boşalana kadar
+    while (HEAD != NULL) { // Liste boÅŸalana kadar
         teil *p = HEAD;
         teil *p_prev = NULL;
-        while (p != NULL) { // Tüm karışık liste için
+        while (p != NULL) { // TÃ¼m karÄ±ÅŸÄ±k liste iÃ§in
             teil *n = p->needs;
             short bool = 1;
-            while(n != NULL) { // Tüm ihtiyaçlar için
+            while(n != NULL) { // TÃ¼m ihtiyaÃ§lar iÃ§in
                 teil *p2 = HEAD_sorted;
-                while (p2 != NULL) { // Tüm sıralanmış liste için
+                while (p2 != NULL) { // TÃ¼m sÄ±ralanmÄ±ÅŸ liste iÃ§in
                     if((strcmp(n->typ, p2->typ) == 0) && (strcmp(n->bez, p2->bez)== 0)) {
                         bool = 1;
                         break;
@@ -136,10 +142,10 @@ int main()
         }
     }
 
-    FILE * fOutput = fopen("C:\\Users\\mhmmd\\CLionProjects\\Kutil\\teil_sortiert.dat", "w");
+    FILE * fOutput = fopen("geordnet.dat", "w");
     teil *p = HEAD_sorted;
     while (p != NULL) {
-        fprintf(fOutput,"%s %s\n", p->typ, p->bez);
+        fprintf(fOutput,"%s %s %s %lf %lf\n", p->typ, p->bez, p->einheit, p->gewicht, p->preis);
         p = p->next;
     }
     fclose(fOutput);
