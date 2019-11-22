@@ -2,7 +2,6 @@
 #include <string.h>
 #include <stdlib.h>
 #include "teil.c"
-#include "utility.c"
 
 int main()
 {
@@ -18,7 +17,6 @@ int main()
     HEAD_sorted = sortingTeils(HEAD, HEAD_sorted);
 
 	printTeils(HEAD_sorted, geordnetPath);
-	freeSpace(HEAD);
 	
 
     return 0;

@@ -1,14 +1,16 @@
+#include <stdio.h>
 #include "teil.h"
+#include "utility.c"
 
 teil* readTeils(teil *HEAD, char path[]) {
-    FILE *teilFile;
-    if ((teilFile = fopen(path, "r")) == NULL)
+    FILE *teilFile = fopen(path, "r");
+    if (teilFile == NULL)
     {
         printf("Error! opening file");
         exit(1);
     }
 
-    char teil_typ[30], teil_bez[30], teil_einheit[10], teil_gewicht[30], teil_preis[30]; //teil.dat
+    char teil_typ[30], teil_bez[30], teil_einheit[10], teil_gewicht[30], teil_preis[30];  //teil.dat
 	
 	teil *TAIL = NULL;
     
@@ -39,8 +41,8 @@ teil* readTeils(teil *HEAD, char path[]) {
 
 void readSchritts(teil *HEAD, char path[]) {
 	
-    FILE *schrittFile;
-    if ((schrittFile = fopen(path, "r")) == NULL)
+    FILE *schrittFile = fopen(path, "r");
+    if (schrittFile == NULL)
     {
         printf("Error! opening file");
         exit(1);
@@ -86,23 +88,23 @@ teil* sortingTeils(teil *HEAD, teil *HEAD_sorted) {
         teil *p_prev = NULL;
         while (p != NULL) { // Tüm karışık liste için
             teil *n = p->needs;
-            short bool = 1;
+            short check = 1;
             while(n != NULL) { // Tüm ihtiyaçlar için
                 teil *p2 = HEAD_sorted;
                 while (p2 != NULL) { // Tüm sıralanmış liste için
                     if((strcmp(n->typ, p2->typ) == 0) && (strcmp(n->bez, p2->bez)== 0)) {
-                        bool = 1;
+                        check = 1;
                         break;
                     }else{
-                        bool = 0;
+                        check = 0;
                     }
                     p2 = p2->next;
                 }
-                if(bool == 0)
+                if(check == 0)
                     break;
                 n = n->needs;
             }
-            if(bool == 1) {
+            if(check == 1) {
                 //OK
                 if (HEAD_sorted == NULL) {
                     HEAD_sorted = p;
@@ -143,4 +145,5 @@ void printTeils(teil *HEAD, char path[]) {
         p = p->next;
     }
     fclose(fOutput);
+    freeSpace(HEAD);
 }
