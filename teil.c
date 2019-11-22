@@ -15,7 +15,7 @@ teil* readTeils(teil *HEAD, char path[]) {
 	teil *TAIL = NULL;
     
     
-    while( fscanf(teilFile,"%s %s %s %s %s", &teil_typ, &teil_bez, &teil_einheit, &teil_gewicht, &teil_preis) != EOF )
+    while( fscanf(teilFile,"%s %s %s %s %s", teil_typ, teil_bez, teil_einheit, teil_gewicht, teil_preis) != EOF )
     {
         teil *temp = (teil*)malloc(sizeof(teil));
         strcpy(temp->typ, teil_typ);
@@ -52,7 +52,7 @@ void readSchritts(teil *HEAD, char path[]) {
     char ziel_typ[30], ziel_bez[30], quel_typ[30], quel_bez[30]; //schritt.dat
     int nr = 0;
 
-    while( fscanf(schrittFile,"%s %s %d %s %s %*lf %*s %*lf", &ziel_typ, &ziel_bez, &nr, &quel_typ, &quel_bez) != EOF )
+    while( fscanf(schrittFile,"%s %s %d %s %s %*s %*s %*s", ziel_typ, ziel_bez, &nr, quel_typ, quel_bez) != EOF )
     {
         teil *temp = (teil*)malloc(sizeof(teil));
         strcpy(temp->typ, quel_typ);
@@ -83,15 +83,15 @@ teil* sortingTeils(teil *HEAD, teil *HEAD_sorted) {
 	
     teil *TAIL_sorted = NULL;
 
-    while (HEAD != NULL) { // Liste boşalana kadar
+    while (HEAD != NULL) {
         teil *p = HEAD;
         teil *p_prev = NULL;
-        while (p != NULL) { // Tüm karışık liste için
+        while (p != NULL) {
             teil *n = p->needs;
             short check = 1;
-            while(n != NULL) { // Tüm ihtiyaçlar için
+            while(n != NULL) {
                 teil *p2 = HEAD_sorted;
-                while (p2 != NULL) { // Tüm sıralanmış liste için
+                while (p2 != NULL) {
                     if((strcmp(n->typ, p2->typ) == 0) && (strcmp(n->bez, p2->bez)== 0)) {
                         check = 1;
                         break;
