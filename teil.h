@@ -5,7 +5,7 @@ typedef struct teil {
     char typ[30], bez[30], einheit[10], gewicht[30], preis[30];
     struct teil * next;
     struct teil * needs;
-    
+
 }teil;
 
 teil* readTeils(teil *HEAD, char path[]);
@@ -14,5 +14,3 @@ teil* sortingTeils(teil *HEAD, teil *HEAD_sorted);
 void printTeils(teil *HEAD, char path[]);
 
 #endif
-
-

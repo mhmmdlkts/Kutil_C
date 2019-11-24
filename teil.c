@@ -1,6 +1,23 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "teil.h"
-#include "utility.c"
+#include "utility.h"
+
+teil* newTeil(char typ[], char bez[], char einheit[], char gewicht[], char preis[]) {
+    teil *temp = (teil*)malloc(sizeof(teil));
+    strcpy(temp->typ, typ);
+    strcpy(temp->bez, bez);
+    strcpy(temp->einheit, einheit);
+    strcpy(temp->gewicht, gewicht);
+    strcpy(temp->preis, preis);
+    temp->needs = NULL;
+    temp->next = NULL;
+}
+
+teil* newSubTeil(char typ[], char bez[]) {
+    return newTeil(typ, bez, NULL, NULL, NULL);
+}
 
 teil* readTeils(teil *HEAD, char path[]) {
     FILE *teilFile = fopen(path, "r");
@@ -11,20 +28,13 @@ teil* readTeils(teil *HEAD, char path[]) {
     }
 
     char teil_typ[30], teil_bez[30], teil_einheit[10], teil_gewicht[30], teil_preis[30];  //teil.dat
-	
-	teil *TAIL = NULL;
-    
-    
+
+	  teil *TAIL = NULL;
+
+
     while( fscanf(teilFile,"%s %s %s %s %s", teil_typ, teil_bez, teil_einheit, teil_gewicht, teil_preis) != EOF )
     {
-        teil *temp = (teil*)malloc(sizeof(teil));
-        strcpy(temp->typ, teil_typ);
-        strcpy(temp->bez, teil_bez);
-        strcpy(temp->einheit, teil_einheit);
-        strcpy(temp->gewicht, teil_gewicht);
-        strcpy(temp->preis, teil_preis);
-        temp->needs = NULL;
-        temp->next = NULL;
+        teil *temp = newTeil(teil_typ, teil_bez, teil_einheit, teil_gewicht, teil_preis);
 
         if(HEAD == NULL) {
             HEAD = temp;
@@ -40,7 +50,7 @@ teil* readTeils(teil *HEAD, char path[]) {
 }
 
 void readSchritts(teil *HEAD, char path[]) {
-	
+
     FILE *schrittFile = fopen(path, "r");
     if (schrittFile == NULL)
     {
@@ -54,11 +64,7 @@ void readSchritts(teil *HEAD, char path[]) {
 
     while( fscanf(schrittFile,"%s %s %d %s %s %*s %*s %*s", ziel_typ, ziel_bez, &nr, quel_typ, quel_bez) != EOF )
     {
-        teil *temp = (teil*)malloc(sizeof(teil));
-        strcpy(temp->typ, quel_typ);
-        strcpy(temp->bez, quel_bez);
-        temp->next = NULL;
-        temp->needs = NULL;
+        teil *temp = newSubTeil(ziel_typ, ziel_bez);
 
         if(nr == 1) {
             teil *p = HEAD;
@@ -75,12 +81,12 @@ void readSchritts(teil *HEAD, char path[]) {
             TAIL_temp = temp;
         }
     }
-    
+
     fclose(schrittFile);
 }
 
 teil* sortingTeils(teil *HEAD, teil *HEAD_sorted) {
-	
+
     teil *TAIL_sorted = NULL;
 
     while (HEAD != NULL) {
