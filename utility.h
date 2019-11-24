@@ -3,5 +3,6 @@
 #include "teil.h"
 
 void freeSpace(teil *HEAD);
+void existFile(FILE *file);
 
 #endif

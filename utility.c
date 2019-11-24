@@ -12,3 +12,11 @@ void freeSpace(teil *HEAD) {
     	free(tmp);
     }
 }
+
+void existFile(FILE *file) {
+    if (file == NULL)
+    {
+        printf("Error! opening file");
+        exit(1);
+    }
+}

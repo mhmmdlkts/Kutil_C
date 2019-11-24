@@ -8,9 +8,9 @@ typedef struct teil {
 
 }teil;
 
-teil* readTeils(teil *HEAD, char path[]);
+void readTeils(teil **HEAD, char path[]);
 void readSchritts(teil *HEAD, char path[]);
-teil* sortingTeils(teil *HEAD, teil *HEAD_sorted);
+void sortingTeils(teil *HEAD, teil **HEAD_sorted);
 void printTeils(teil *HEAD, char path[]);
 
 #endif
