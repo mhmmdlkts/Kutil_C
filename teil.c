@@ -21,10 +21,6 @@ teil* newTeil(char typ[], char bez[], char einheit[], char gewicht[], char preis
     return temp;
 }
 
-void printTeil(teil *temp) {
-	printf("%s %s %s %s %s %s &s\n", temp->typ, temp->bez, temp->einheit, temp->gewicht, temp->preis, temp->next->typ, temp->needs->typ);
-}
-
 void addTeilToList(teil **HEAD, teil **TAIL, teil *p) {
     if(*HEAD == NULL) {
         *HEAD = p;
@@ -36,7 +32,7 @@ void addTeilToList(teil **HEAD, teil **TAIL, teil *p) {
 }
 
 void transferTeil(teil **HEAD_FROM, teil **HEAD_TO, teil **TAIL_TO, teil *p, teil *p_prev) {
-	
+
     //OK
     if (*HEAD_TO == NULL) {
         *HEAD_TO = p;
@@ -45,7 +41,7 @@ void transferTeil(teil **HEAD_FROM, teil **HEAD_TO, teil **TAIL_TO, teil *p, tei
         (*TAIL_TO)->next = p;
         *TAIL_TO = p;
     }
-    
+
     if (p_prev == NULL) {
         *HEAD_FROM = p->next;
     } else {

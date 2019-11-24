@@ -2,9 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "teil.h"
-
-#include "teil.c"//TODO DELETE
-#include "utility.c"
+#include "utility.h"
 
 int main()
 {
@@ -17,7 +15,7 @@ int main()
 
     teil *HEAD = NULL;
     teil *HEAD_sorted = NULL;
-    
+
 	readTeils(&HEAD, teilPath);
     readSchritts(HEAD, schrittPath);
     sortingTeils(HEAD, &HEAD_sorted);
