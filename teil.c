@@ -52,7 +52,7 @@ void transferTeil(teil **HEAD_FROM, teil **HEAD_TO, teil **TAIL_TO, teil *p, tei
 
 short canTeilBuild (teil *HEAD_sorted, teil *p) {
 	teil *n = p->needs;
-    short check = 1;
+    short check = 1; //bool check = true;
     while(n != NULL) {
         teil *p2 = HEAD_sorted;
         while (p2 != NULL) {
