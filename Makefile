@@ -1,4 +1,6 @@
-default: programm
-
-programm: programm.c teil.c utility.c
-	cc -o programm programm.c teil.c utility.c
+CFLAGS=-O3
+PROGRAMS=programm
+default: $(PROGRAMS)
+programm: programm.o teil.o utility.o
+clean:
+	-rm -f *.o $(PROGRAMS)
