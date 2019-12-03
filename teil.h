@@ -15,5 +15,7 @@ void readTeils(teil **HEAD, char path[]);
 void readSchritts(teil *HEAD, char path[]);
 void sortingTeils(teil *HEAD, teil **HEAD_sorted);
 void printTeils(teil *HEAD, char path[]);
+short isSameTeil (teil *teil1, teil *teil2);
+void doItBlockFormat(teil *HEAD);
 
 #endif

@@ -20,3 +20,13 @@ void existFile(FILE *file) {
         exit(1);
     }
 }
+
+int getMax(int a, int b) {
+  if (a > b)
+    return a;
+  return b;
+}
+
+int getLenght (char arr[]) {
+  
+}

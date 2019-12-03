@@ -16,8 +16,8 @@ teil* newTeil(char typ[], char bez[], char einheit[], char gewicht[], char preis
 	    strcpy(temp->gewicht, gewicht);
     if(preis != NULL)
 	    strcpy(temp->preis, preis);
-	    temp->needs = NULL;
-	    temp->next = NULL;
+    temp->needs = NULL;
+    temp->next = NULL;
     return temp;
 }
 
@@ -32,8 +32,6 @@ void addTeilToList(teil **HEAD, teil **TAIL, teil *p) {
 }
 
 void transferTeil(teil **HEAD_FROM, teil **HEAD_TO, teil **TAIL_TO, teil *p, teil *p_prev) {
-
-    //OK
     if (*HEAD_TO == NULL) {
         *HEAD_TO = p;
         *TAIL_TO = p;
@@ -50,13 +48,19 @@ void transferTeil(teil **HEAD_FROM, teil **HEAD_TO, teil **TAIL_TO, teil *p, tei
     p->next = NULL;
 }
 
+short isSameTeil (teil *teil1, teil *teil2) {
+  if ((strcmp(teil1->typ, teil2->typ) == 0) && (strcmp(teil1->bez, teil2->bez)== 0))
+    return 1;
+  return 0;
+}
+
 short canTeilBuild (teil *HEAD_sorted, teil *p) {
 	teil *n = p->needs;
     short check = 1; //bool check = true;
     while(n != NULL) {
         teil *p2 = HEAD_sorted;
         while (p2 != NULL) {
-            if((strcmp(n->typ, p2->typ) == 0) && (strcmp(n->bez, p2->bez)== 0)) {
+            if(isSameTeil(n,p2)) {
                 check = 1;
                 break;
             }else{
@@ -64,7 +68,7 @@ short canTeilBuild (teil *HEAD_sorted, teil *p) {
             }
             p2 = p2->next;
         }
-        if(check == 0)
+        if(!check)
             break;
         n = n->needs;
     }
@@ -93,7 +97,7 @@ void readSchritts(teil *HEAD, char path[]) {
     FILE *schrittFile = fopen(path, "r");
     existFile(schrittFile);
 
-	teil *TAIL_temp = NULL;
+    teil *TAIL_temp = NULL;
     char ziel_typ[30], ziel_bez[30], quel_typ[30], quel_bez[30]; //schritt.dat
     int nr = 0;
 
@@ -104,7 +108,7 @@ void readSchritts(teil *HEAD, char path[]) {
         if(nr == 1) {
             teil *p = HEAD;
             while (p != NULL) {
-                if((strcmp(p->typ, ziel_typ) == 0) && (strcmp(p->bez, ziel_bez)== 0)) { // TODO method for compare
+                if((strcmp(p->typ, ziel_typ) == 0) && (strcmp(p->bez, ziel_bez)== 0)) {
                     p->needs = temp;
                     TAIL_temp = p->needs;
                     break;
@@ -128,7 +132,7 @@ void sortingTeils(teil *HEAD, teil **HEAD_sorted) {
         teil *p = HEAD;
         teil *p_prev = NULL;
         while (p != NULL) {
-            if(canTeilBuild(*HEAD_sorted, p) == 1) { //ok
+            if(canTeilBuild(*HEAD_sorted, p)) {
             	transferTeil(&HEAD, HEAD_sorted, &TAIL_sorted, p, p_prev);
             }
             p_prev = p;
@@ -138,7 +142,19 @@ void sortingTeils(teil *HEAD, teil **HEAD_sorted) {
     freeSpace(HEAD);
 }
 
+
+void doItBlockFormat(teil *HEAD) {
+  int maxTyp=0, maxBez=0, maxEinheit=0, maxGewicht=0, maxPreis=0;
+  teil *p = HEAD;
+  while (p != NULL) {
+    maxTyp = getMax(maxTyp, strlen(p->typ));
+    printf("%d\n", maxTyp);
+    p = p->next;
+  }
+}
+
 void printTeils(teil *HEAD, char path[]) {
+  doItBlockFormat(HEAD);
     FILE * fOutput = fopen(path, "w");
     teil *p = HEAD;
     while (p != NULL) {
