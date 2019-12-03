@@ -13,6 +13,9 @@ int main(int argc, char *argv[])
     teil *HEAD = NULL;
     teil *HEAD_sorted = NULL;
 
+    int a = countOfUmlats(argv[3]);
+    printf("%d\n", a);
+
   	readTeils(&HEAD, teilPath);
     readSchritts(HEAD, schrittPath);
     sortingTeils(HEAD, &HEAD_sorted);

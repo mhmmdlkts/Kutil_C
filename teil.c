@@ -142,13 +142,24 @@ void sortingTeils(teil *HEAD, teil **HEAD_sorted) {
     freeSpace(HEAD);
 }
 
-
 void doItBlockFormat(teil *HEAD) {
   int maxTyp=0, maxBez=0, maxEinheit=0, maxGewicht=0, maxPreis=0;
   teil *p = HEAD;
   while (p != NULL) {
     maxTyp = getMax(maxTyp, strlen(p->typ));
-    printf("%d\n", maxTyp);
+    maxBez = getMax(maxBez, strlen(p->bez));
+    maxEinheit = getMax(maxEinheit, strlen(p->einheit));
+    maxGewicht = getMax(maxGewicht, strlen(p->gewicht));
+    maxPreis = getMax(maxPreis, strlen(p->preis));
+    p = p->next;
+  }
+  p = HEAD;
+  while (p != NULL) {
+    addBlanks(p->typ, maxTyp);
+    addBlanks(p->bez, maxBez);
+    addBlanks(p->einheit, maxEinheit);
+    addBlanks(p->gewicht, maxGewicht);
+    addBlanks(p->preis, maxPreis);
     p = p->next;
   }
 }
