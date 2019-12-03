@@ -97,14 +97,14 @@ void readSchritts(teil *HEAD, char path[]) {
     char ziel_typ[30], ziel_bez[30], quel_typ[30], quel_bez[30]; //schritt.dat
     int nr = 0;
 
-    while( fscanf(schrittFile,"%s %s %d %s %s %*s %*s %*s", ziel_typ, ziel_bez, &nr, quel_typ, quel_bez) != EOF )
+    while( fscanf(schrittFile,"%s %s %d %s %s %*s %*s %*s", ziel_typ, ziel_bez, &nr, quel_typ, quel_bez) != EOF ) // TODO %s to %100s
     {
         teil *temp = newTeil(quel_typ, quel_bez, NULL, NULL, NULL);
 
         if(nr == 1) {
             teil *p = HEAD;
             while (p != NULL) {
-                if((strcmp(p->typ, ziel_typ) == 0) && (strcmp(p->bez, ziel_bez)== 0)) {
+                if((strcmp(p->typ, ziel_typ) == 0) && (strcmp(p->bez, ziel_bez)== 0)) { // TODO method for compare
                     p->needs = temp;
                     TAIL_temp = p->needs;
                     break;
