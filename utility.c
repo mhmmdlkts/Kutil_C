@@ -29,9 +29,9 @@ int getMax(int a, int b) {
 }
 
 void addBlanks(char arr[], int lastLen) {
-  int i;
+  int i; int constanteBlanks = 2;
   int length = strlen(arr) - countOfAllGermanUmlauts(arr);
-  for (i = 0; i < lastLen - length; i++)
+  for (i = 0; i < lastLen - length + constanteBlanks; i++)
     strcat(arr," ");
 }
 
