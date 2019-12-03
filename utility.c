@@ -30,31 +30,31 @@ int getMax(int a, int b) {
 
 void addBlanks(char arr[], int lastLen) {
   int i;
-  int length = strlen(arr);
+  int length = strlen(arr) - countOfAllGermanUmlauts(arr);
   for (i = 0; i < lastLen - length; i++)
     strcat(arr," ");
 }
 
-int countOfUmlats (char arr[]) {
-  if(strlen(arr) < 1)
-    return 0;
+int countOfAllGermanUmlauts (char arr[]) {
+  int um = 0;
+  um += countOfMultiChar(arr,"Ä");
+  um += countOfMultiChar(arr,"ä");
 
-  char delimiter[] = "a";
-  char *ptr;
+  um += countOfMultiChar(arr,"Ü");
+  um += countOfMultiChar(arr,"ü");
 
-  ptr = strtok(arr, delimiter);
-  int i = -1;
-  while(ptr != NULL) {
-    i++;
-    printf("%s\n", ptr);
-   	ptr = strtok(NULL, delimiter);
-  }
-  return i;
-/*
+  um += countOfMultiChar(arr,"Ö");
+  um += countOfMultiChar(arr,"ö");
 
-  if(strlen(arr) < 1)
-    return 0;
-  char umleut[2] = {"ä"}; //als string weil als char bekommt man multi-charackter warning
+  um += countOfMultiChar(arr,"ß");
+  return um;
+}
+
+int countOfMultiChar (char arr[], char umlaut[]) {
   int len = 0;
-  return strlen(arr);*/
+  int i = 0;
+  for(i = 0; i < strlen(arr); i++)
+    if(arr[i] == umlaut[0] && arr[i+1] == umlaut[1])
+        len++;
+  return len;
 }

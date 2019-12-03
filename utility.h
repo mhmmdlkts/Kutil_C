@@ -5,7 +5,8 @@
 void freeSpace(teil *HEAD);
 void existFile(FILE *file);
 int getMax(int a, int b);
-int countOfUmlats (char arr[]);
+int countOfMultiChar (char arr[], char umlaut[]);
+int countOfAllGermanUmlauts (char arr[]);
 void addBlanks(char arr[], int lastLen);
 
 #endif
