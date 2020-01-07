@@ -100,16 +100,18 @@ void readSchritts(teil *HEAD, char path[]) {
     teil *TAIL_temp = NULL;
     char ziel_typ[30], ziel_bez[30], quel_typ[30], quel_bez[30]; //schritt.dat
     int nr = 0;
+    teil *temp_ziel_old = NULL;
 
-    while( fscanf(schrittFile,"%s %s %d %s %s %*s %*s %*s", ziel_typ, ziel_bez, &nr, quel_typ, quel_bez) != EOF ) // TODO %s to %100s // Ja.  Rade
+    while( fscanf(schrittFile,"%100s %100s %d %100s %100s %*s %*s %*s", ziel_typ, ziel_bez, &nr, quel_typ, quel_bez) != EOF ) // TODO %s to %100s // Ja.  Rade // OK.
     {
         teil *temp = newTeil(quel_typ, quel_bez, NULL, NULL, NULL);
+        teil *temp_ziel = newTeil(ziel_typ, ziel_bez, NULL, NULL, NULL);
 
-        // Dieser Teil setzt die richtige Sortierreihenfolge von schritt.dat voraus, das ist nicht ganz so gut.  Rade
-        if(nr == 1) {
+        // Dieser Teil setzt die richtige Sortierreihenfolge von schritt.dat voraus, das ist nicht ganz so gut.  Rade // OK.
+        if(temp_ziel_old == NULL || !isSameTeil(temp_ziel, temp_ziel_old)) {
             teil *p = HEAD;
             while (p != NULL) {
-                if((strcmp(p->typ, ziel_typ) == 0) && (strcmp(p->bez, ziel_bez)== 0)) {
+                if(isSameTeil(p,temp_ziel)) {
                     p->needs = temp;
                     TAIL_temp = p->needs;
                     break;
@@ -120,6 +122,7 @@ void readSchritts(teil *HEAD, char path[]) {
             TAIL_temp->needs = temp;
             TAIL_temp = temp;
         }
+        temp_ziel_old = temp_ziel;
     }
 
     fclose(schrittFile);
@@ -140,7 +143,7 @@ void sortingTeils(teil *HEAD, teil **HEAD_sorted) {
             p = p->next;
         }
     }
-    freeSpace(HEAD);
+    freeTeils(HEAD);
 }
 
 void doItBlockFormat(teil *HEAD) {
@@ -174,5 +177,23 @@ void printTeils(teil *HEAD, char path[]) {
         p = p->next;
     }
     fclose(fOutput);
-    freeSpace(HEAD);
+    freeTeils(HEAD);
+}
+
+void freeTeils(teil *HEAD) {
+    if(HEAD == NULL)
+    	return;
+    teil *p = HEAD;
+    while (p != NULL) {
+      teil *p2 = p->needs;
+      while (p2 != NULL) {
+      	teil *tmp2 = p2;
+          p2 = p2->needs;
+      	free(tmp2);
+      }
+    	teil *tmp = p;
+        p = p->next;
+    	free(tmp);
+    }
+    // Die Liste in p->needs muss auch noch freigegeben werden.  Rade // OK.
 }
