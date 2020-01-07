@@ -12,6 +12,7 @@ void freeSpace(teil *HEAD) {
         p = p->next;
     	free(tmp);
     }
+    // Die Liste in p->needs muss auch noch freigegeben werden.  Rade
 }
 
 void existFile(FILE *file) {

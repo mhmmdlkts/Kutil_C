@@ -101,10 +101,11 @@ void readSchritts(teil *HEAD, char path[]) {
     char ziel_typ[30], ziel_bez[30], quel_typ[30], quel_bez[30]; //schritt.dat
     int nr = 0;
 
-    while( fscanf(schrittFile,"%s %s %d %s %s %*s %*s %*s", ziel_typ, ziel_bez, &nr, quel_typ, quel_bez) != EOF ) // TODO %s to %100s
+    while( fscanf(schrittFile,"%s %s %d %s %s %*s %*s %*s", ziel_typ, ziel_bez, &nr, quel_typ, quel_bez) != EOF ) // TODO %s to %100s // Ja.  Rade
     {
         teil *temp = newTeil(quel_typ, quel_bez, NULL, NULL, NULL);
 
+        // Dieser Teil setzt die richtige Sortierreihenfolge von schritt.dat voraus, das ist nicht ganz so gut.  Rade
         if(nr == 1) {
             teil *p = HEAD;
             while (p != NULL) {
